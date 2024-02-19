@@ -13,17 +13,18 @@ public:
 	void open();
 	int getValue();
 	Suit getSuit();
-	std::string& Draw();
+	std::string Draw();
 };
 
 class Deck {
 private:
 	std::vector<Card*> cards;
-	int countCards;
+	int countCards = 0;
 public:
-	Deck();
+	Deck() = default;
+	Deck(std::vector<Card*>& cards): cards(cards), countCards(cards.size()) {};
 	Card* getRandomCard();
-	std::string& Draw();
+	std::string Draw();
 };
 
 
@@ -31,12 +32,16 @@ public:
 class Row {
 private:
 	std::vector<Card*> cards;
-	bool isRowForDeck;
+	int count=0;
+	bool isRowForDeck = false;
+	bool isCardBlack(Card* card);
 public:
+	Row() = default;
 	Row(bool isRowForDeck): cards(), isRowForDeck(isRowForDeck) {};
 	void addCard(Card* card);
+	void addCardForce(Card* card);
 	Card* takeCard();
-	std::vector<std::string>& Draw();
+	std::vector<std::string> Draw();
 };
 
 
@@ -45,20 +50,21 @@ private:
 	std::vector<Card*> cards;
 	bool is_finished = false;
 public:
+	Stack() = default;
 	void addCard(Card* card);
 	bool getFlag();
-	std::vector<std::string>& Draw();
+	std::vector<std::string> Draw();
 };
 
 class Desk {
 private:
+	std::vector<Card> CardPull;
 	Deck deck;
 	Row RowForDeck;
 	std::vector<Row> rows;
 	std::vector<Stack> stacks;
 public:
-	Desk() = default;
-	void initialize();
+	Desk();
 	void moveCardFromRowToRow(int first, int second);
 	void moveCardFromRowToStack(int first, int second);
 	void takeCardFromDeck();
