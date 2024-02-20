@@ -63,6 +63,12 @@ std::string Deck::Draw() {
 	return result;
 }
 
+void Deck::takeNewCards(std::vector<Card*>& newCards)
+{
+	cards = newCards;
+	countCards = newCards.size();
+}
+
 
 
 
@@ -127,6 +133,7 @@ void Stack::addCard(Card* card) {
 		if (card->getValue() == 12) {
 			is_finished = true;
 		}
+		count++;
 	}
 	else {
 		throw std::invalid_argument("Wrong card");

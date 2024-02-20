@@ -23,8 +23,10 @@ private:
 public:
 	Deck() = default;
 	Deck(std::vector<Card*>& cards): cards(cards), countCards(cards.size()) {};
+	void takeNewCards(std::vector<Card*>& newCards);
 	Card* getRandomCard();
 	std::string Draw();
+	int getCount() { return countCards; };
 };
 
 
@@ -42,6 +44,7 @@ public:
 	void addCardForce(Card* card);
 	Card* takeCard();
 	std::vector<std::string> Draw();
+	int getCount() { return count; };
 };
 
 
@@ -49,11 +52,13 @@ class Stack {
 private:
 	std::vector<Card*> cards;
 	bool is_finished = false;
+	int count = 0;
 public:
 	Stack() = default;
 	void addCard(Card* card);
 	bool getFlag();
 	std::vector<std::string> Draw();
+	int getCount() { return count; };
 };
 
 class Desk {
