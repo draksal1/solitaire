@@ -49,8 +49,8 @@ Card* Deck::getRandomCard() {
 		int index = rand() % countCards;
 		Card* tmp = cards[rand() % countCards];
 		cards.erase(cards.begin() + index);
-		return tmp;
 		countCards--;
+		return tmp;
 	}
 	else {
 		throw std::out_of_range("Empty row");
@@ -85,12 +85,25 @@ bool Row::isCardBlack(Card* card) {
 
 
 void Row::addCard(Card* card) {
-	if ((isCardBlack(card) != isCardBlack(cards.back())) && (card->getValue() == (cards.back()->getValue() - 1))) {
-		cards.push_back(card);
-		count++;
+	if (count < 1) {
+		if (card->getValue() == 12)
+		{
+			cards.push_back(card);
+			count++;
+			return;
+		}
+		else {
+			throw std::invalid_argument("Wrong card");
+		}
 	}
 	else {
-		throw std::invalid_argument("Wrong card");
+		if ((isCardBlack(card) != isCardBlack(cards.back())) && (card->getValue() == (cards.back()->getValue() - 1))) {
+			cards.push_back(card);
+			count++;
+		}
+		else {
+			throw std::invalid_argument("Wrong card");
+		}
 	}
 }
 
@@ -106,7 +119,10 @@ Card* Row::takeCard()
 	if (count > 0) {
 		Card* tmp = cards.back();
 		cards.pop_back();
-		cards.back()->open();
+		count--;
+		if (count != 0) {
+			cards.back()->open();
+		}
 		return tmp;
 	}
 	else {
@@ -127,16 +143,27 @@ std::vector<std::string> Row::Draw() {
 
 
 void Stack::addCard(Card* card) {
-	if (	((card->getSuit() == cards.back()->getSuit())	&&	(card->getValue() == (cards.back()->getValue() + 1)))	||	(cards.size() == 0 && card->getValue() == 0) ){
-		cards.push_back(card);
+	if (count >= 1) {
+		if (((card->getSuit() == cards.back()->getSuit()) && (card->getValue() == (cards.back()->getValue() + 1))) || (cards.size() == 0 && card->getValue() == 0)) {
+			cards.push_back(card);
 
-		if (card->getValue() == 12) {
-			is_finished = true;
+			if (card->getValue() == 12) {
+				is_finished = true;
+			}
+			count++;
 		}
-		count++;
+		else {
+			throw std::invalid_argument("Wrong card");
+		}
 	}
 	else {
-		throw std::invalid_argument("Wrong card");
+		if (card->getValue() == 1) {
+			cards.push_back(card);
+			count++;
+		}
+		else {
+			throw std::invalid_argument("Wrong card");
+		}
 	}
 }
 
@@ -146,12 +173,8 @@ bool Stack::getFlag() {
 }
 
 
-std::vector<std::string> Stack::Draw() {
-	std::vector<std::string> result;
-	for (auto i = cards.begin(); i < cards.end(); i++) {
-		result.push_back((*i)->Draw());
-	}
-	return result;
+std::string Stack::Draw() {
+	return cards.back()->Draw();
 }
 
 
@@ -170,10 +193,10 @@ Desk::Desk() {
 	}
 
 	deck = Deck(cards);
-	RowForDeck = Row(true);
+	RowForDeck = Row();
 	
 	for (int i = 0; i < 7; i++) {
-		rows.emplace_back(Row(false));
+		rows.emplace_back(Row());
 	}
 
 	for (int i = 0; i < 4; i++) {

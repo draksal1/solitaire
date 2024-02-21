@@ -35,11 +35,9 @@ class Row {
 private:
 	std::vector<Card*> cards;
 	int count=0;
-	bool isRowForDeck = false;
 	bool isCardBlack(Card* card);
 public:
 	Row() = default;
-	Row(bool isRowForDeck): cards(), isRowForDeck(isRowForDeck) {};
 	void addCard(Card* card);
 	void addCardForce(Card* card);
 	Card* takeCard();
@@ -57,7 +55,7 @@ public:
 	Stack() = default;
 	void addCard(Card* card);
 	bool getFlag();
-	std::vector<std::string> Draw();
+	std::string Draw();
 	int getCount() { return count; };
 };
 
