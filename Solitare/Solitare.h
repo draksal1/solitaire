@@ -41,8 +41,9 @@ public:
 	void addCard(Card* card);
 	void addCardForce(Card* card);
 	Card* takeCard();
-	std::vector<std::string> Draw();
+	std::string Draw();
 	int getCount() { return count; };
+	std::vector<Card*> takeAllCards();
 };
 
 
@@ -71,5 +72,8 @@ public:
 	void moveCardFromRowToRow(int first, int second);
 	void moveCardFromRowToStack(int first, int second);
 	void takeCardFromDeck();
+	void returnCardsToDeck();
+	std::string Draw();
+	void initialize();
 };
 	

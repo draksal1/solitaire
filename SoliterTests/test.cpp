@@ -106,14 +106,24 @@ TEST(RowTests, DrawTest) {
 	card2.open();
 	row.addCard(&card1);
 	row.addCard(&card2);
-	std::vector<std::string> test;
-	test.push_back(std::string("*"));
-	test.push_back(std::string("11♥️"));
-	EXPECT_EQ(row.Draw(), test);
-
+	EXPECT_EQ(row.Draw(), "|*|11♥️");
 	row.takeCard();
-	test = { "12♣️" };
-	EXPECT_EQ(row.Draw(), test);
+	EXPECT_EQ(row.Draw(), "|12♣️");
+}
+
+TEST(RowTests, TakeAllCardsTest) {
+	Row row = Row();
+	Card card1(12, Clubs);
+	Card card2(11, Hearts);
+	card2.open();
+	row.addCard(&card1);
+	row.addCard(&card2);
+	std::vector<Card*> testing = row.takeAllCards();
+	EXPECT_EQ(row.getCount(), 0);
+	EXPECT_THROW(row.takeCard(), std::out_of_range);
+	std::vector<Card*> test({ &card1, &card2 });
+	EXPECT_EQ(testing, test);
+	EXPECT_EQ(row.takeAllCards(), std::vector<Card*>());
 }
 
 TEST(StackTests, ConstructorTest) {
