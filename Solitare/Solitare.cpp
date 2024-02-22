@@ -6,6 +6,9 @@
 void Card::open() {
 	is_open = true;
 }
+void Card::close() {
+	is_open = false;
+}
 
 
 int Card::getValue(){
@@ -252,13 +255,15 @@ void Desk::moveCardFromRowToRow(int first, int second) {
 
 	try {
 		rows[second].addCard(tmp);
-		rows[second].openLastCard();
-	}
-	catch (std::invalid_argument) {
 		if (first == 7) {
-			RowForDeck.addCardForce(tmp);
+			RowForDeck.openLastCard();
 		}
 		else {
+			rows[first].openLastCard();
+		}
+	}
+	catch (std::invalid_argument) {
+		if (first != 7) {
 			rows[first].addCardForce(tmp);
 		}
 	}
@@ -291,7 +296,9 @@ void Desk::moveCardFromRowToStack(int first, int second) {
 
 	try {
 		stacks[second].addCard(tmp);
-		rows[second].openLastCard();
+		if (first != 7) {
+			rows[first].openLastCard();
+		}
 	}
 	catch (std::invalid_argument) {
 		if (first == 7) {
@@ -301,6 +308,54 @@ void Desk::moveCardFromRowToStack(int first, int second) {
 			rows[first].addCardForce(tmp);
 		}
 	}
+}
+
+void Desk::moveNCardsFromRowToRow(int first, int second, int count) {
+	if (first > 7 || first < 0 || second > 6 || second < 0 || (first==7 && count!=1) || count >13 || count <1) {
+		return;
+	}
+	std::vector<Card*> cards;
+	Card* tmp;
+	for (int i = 0; i < count; i++) {
+		try {
+			tmp = rows[first].takeCard();
+		}
+		catch (std::out_of_range) {
+			int N = cards.size();
+			for (int j = 0; j < N; j++) {
+				rows[first].addCardForce(cards.back());
+				cards.pop_back();
+			}
+			return;
+		}
+		
+		cards.push_back(tmp);
+		if (tmp->Draw() == "*") {
+			int N = cards.size();
+			for (int j = 0; j < N; j++) {
+				rows[first].addCardForce(cards.back());
+				cards.pop_back();
+			}
+			return;
+		}
+	}
+	
+	for (int i = 0; i < cards.size(); i++) {
+		tmp = cards.back();
+		try {
+			rows[second].addCard(tmp);
+		}
+		catch(std::invalid_argument) {
+			int N = cards.size();
+			for (int j = 0; j < N; j++) {
+				rows[first].addCardForce(cards.back());
+				cards.pop_back();
+			}
+			return;
+		}
+		cards.pop_back();
+	}
+	rows[first].openLastCard();
 }
 
 
@@ -348,6 +403,7 @@ void Desk::initialize() {
 	deck = Deck();
 	std::vector<Card*> cards;
 	for (auto i = CardPull.begin(); i < CardPull.end(); i++) {
+		(*i).close();
 		cards.push_back( &(*i));
 	}
 	deck.takeNewCards(cards);

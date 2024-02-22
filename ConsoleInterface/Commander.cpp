@@ -5,7 +5,7 @@ void Commander::operator()(std::string& comand)
 {
 	std::vector<std::string> parsedCommand = parse(comand);
     int wordsCount = parsedCommand.size();
-    if (wordsCount > 2 || wordsCount<1)
+    if (wordsCount > 3 || wordsCount<1)
     {
         return;
     }
@@ -24,7 +24,7 @@ void Commander::operator()(std::string& comand)
             desk.returnCardsToDeck();
         }
     }
-    else {
+    else if(wordsCount == 2) {
         if (parsedCommand[0].size() == 2 || parsedCommand[1].size() == 2)
         {
             int first = parsedCommand[0][1] - '0';
@@ -38,6 +38,20 @@ void Commander::operator()(std::string& comand)
                     desk.moveCardFromRowToRow(first, second);
                 }
             }
+        }
+    }
+    else {
+        int first = parsedCommand[0][1] - '0';
+        int second = parsedCommand[1][1] - '0';
+        int count = 1;
+        try {
+            count = stoi(parsedCommand[2]);
+        }
+        catch(...) {
+            return;
+        }
+        if (parsedCommand[0][0] == 'R' && first < 7 && first >= 0 && parsedCommand[1][0] == 'R' && second < 7 && second >= 0) {
+            desk.moveNCardsFromRowToRow(first, second, count);
         }
     }
 }

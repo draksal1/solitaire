@@ -11,6 +11,7 @@ private:
 public:
 	Card(int value, Suit suit): value(value), suit(suit) {};
 	void open();
+	void close();
 	int getValue();
 	Suit getSuit();
 	std::string Draw();
@@ -72,6 +73,7 @@ public:
 	Desk();
 	void moveCardFromRowToRow(int first, int second);
 	void moveCardFromRowToStack(int first, int second);
+	void moveNCardsFromRowToRow(int first, int second, int count);
 	void takeCardFromDeck();
 	void returnCardsToDeck();
 	std::string Draw();
