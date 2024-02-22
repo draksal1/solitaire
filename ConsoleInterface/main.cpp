@@ -11,7 +11,12 @@ int main() {
 	while (command != "quit") {
 		system("cls");
 		commander(command);
-		std::cout << desk.Draw() << std::endl;
+		if (desk.checkWin()) {
+			std::cout << "You win!";
+		}
+		else {
+			std::cout << desk.Draw() << std::endl;
+		}
 		std::getline(std::cin, command);
 	}
 	

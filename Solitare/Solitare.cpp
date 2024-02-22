@@ -157,7 +157,7 @@ std::string Row::Draw() {
 
 std::vector<Card*> Row::takeAllCards() {
 	if (count < 1) {
-		return std::vector<Card*>();
+		throw std::out_of_range("Empty row");
 	}
 	std::vector<Card*> tmp = cards;
 	cards = std::vector<Card*>();
@@ -183,7 +183,7 @@ void Stack::addCard(Card* card) {
 		}
 	}
 	else {
-		if (card->getValue() == 1) {
+		if (card->getValue() == 0) {
 			cards.push_back(card);
 			count++;
 		}
@@ -223,7 +223,7 @@ Desk::Desk() {
 
 void Desk::moveCardFromRowToRow(int first, int second) {
 	if (first > 7 || first < 0 || second > 6 || second < 0) {
-		throw std::out_of_range("Wrong nunber");
+		return;
 	}
 	Card* tmp;
 
@@ -245,7 +245,7 @@ void Desk::moveCardFromRowToRow(int first, int second) {
 
 void Desk::moveCardFromRowToStack(int first, int second) {
 	if (first > 7 || first < 0 || second > 3 || second < 0) {
-		throw std::out_of_range("Wrong nunber");
+		return;
 	}
 	Card* tmp;
 
@@ -266,16 +266,28 @@ void Desk::moveCardFromRowToStack(int first, int second) {
 
 
 void Desk::takeCardFromDeck() {
-	Card* tmp = deck.getRandomCard();
+	Card* tmp;
+	try {
+		tmp = deck.getRandomCard();
+	}
+	catch (std::out_of_range) {
+		return;
+	}
 	tmp->open();
 	RowForDeck.addCardForce(tmp);
 }
 
 void Desk::returnCardsToDeck() {
-	if (deck.getCount() != 0 || RowForDeck.getCount() == 0) {
+	if (deck.getCount() != 0) {
 		return;
 	}
-	std::vector<Card*> tmp = RowForDeck.takeAllCards();
+	std::vector<Card*> tmp;
+	try {
+		tmp = RowForDeck.takeAllCards();
+	}
+	catch (std::invalid_argument){
+		return;
+		}
 	deck.takeNewCards(tmp);
 }
 
@@ -320,4 +332,13 @@ void Desk::initialize() {
 		stacks[i] = Stack();
 	}
 	
+}
+
+bool Desk::checkWin() {
+	for (auto i = stacks.begin(); i < stacks.end(); i++){
+		if (!(*i).getFlag()) {
+			return false;
+		}
+	}
+	return true;
 }

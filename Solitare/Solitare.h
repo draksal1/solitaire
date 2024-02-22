@@ -75,5 +75,6 @@ public:
 	void returnCardsToDeck();
 	std::string Draw();
 	void initialize();
+	bool checkWin();
 };
 	
