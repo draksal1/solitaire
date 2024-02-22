@@ -32,6 +32,8 @@ R1 R2 - move cards from row 1 to row 2 (rows are signed, row 7 is where cards fr
 
 R5 S0 - move a card from row 5 to stack 0 (stacks are numbered from 0 to 3 from left to right).
 
+R5 R2 N - move N cards from row 5 to row 2.
+
 
 <h2>PS:</h2>
 GLHF!
