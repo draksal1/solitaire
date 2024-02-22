@@ -255,16 +255,16 @@ void Desk::moveCardFromRowToRow(int first, int second) {
 
 	try {
 		rows[second].addCard(tmp);
-		if (first == 7) {
-			RowForDeck.openLastCard();
-		}
-		else {
+		if (first != 7) {
 			rows[first].openLastCard();
 		}
 	}
 	catch (std::invalid_argument) {
 		if (first != 7) {
 			rows[first].addCardForce(tmp);
+		}
+		else {
+			RowForDeck.addCardForce(tmp);
 		}
 	}
 }
@@ -339,8 +339,8 @@ void Desk::moveNCardsFromRowToRow(int first, int second, int count) {
 			return;
 		}
 	}
-	
-	for (int i = 0; i < cards.size(); i++) {
+	int N = cards.size();
+	for (int i = 0; i < N; i++) {
 		tmp = cards.back();
 		try {
 			rows[second].addCard(tmp);
@@ -379,7 +379,7 @@ void Desk::returnCardsToDeck() {
 	try {
 		tmp = RowForDeck.takeAllCards();
 	}
-	catch (std::invalid_argument){
+	catch (std::out_of_range){
 		return;
 		}
 	deck.takeNewCards(tmp);
