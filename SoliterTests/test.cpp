@@ -11,7 +11,9 @@ TEST(CardTests, DrawTest) {
 	Card card(10, Spades);
 	EXPECT_EQ(card.Draw(), std::string("*"));
 	card.open();
-	EXPECT_EQ(card.Draw(), std::string("10♠️"));
+	std::string test = "J"; 
+	test = test+u8"\u2660";
+	EXPECT_EQ(card.Draw(), test);
 }
 
 TEST(DeckTests, ConstructorTest) {
@@ -106,24 +108,29 @@ TEST(RowTests, DrawTest) {
 	card2.open();
 	row.addCard(&card1);
 	row.addCard(&card2);
-	EXPECT_EQ(row.Draw(), "|*|11♥️");
+	std::string test = "|*|Q";
+	test = test + u8"\u2665";
+	EXPECT_EQ(row.Draw(), test);
 	row.takeCard();
-	EXPECT_EQ(row.Draw(), "|12♣️");
+	row.openLastCard();
+	std::string test2 = "|K";
+	test2 = test2 + u8"\u2663";
+	EXPECT_EQ(row.Draw(), test2);
 }
 
 TEST(RowTests, TakeAllCardsTest) {
 	Row row = Row();
 	Card card1(12, Clubs);
 	Card card2(11, Hearts);
-	card2.open();
 	row.addCard(&card1);
 	row.addCard(&card2);
+	row.openLastCard();
 	std::vector<Card*> testing = row.takeAllCards();
 	EXPECT_EQ(row.getCount(), 0);
 	EXPECT_THROW(row.takeCard(), std::out_of_range);
 	std::vector<Card*> test({ &card1, &card2 });
 	EXPECT_EQ(testing, test);
-	EXPECT_EQ(row.takeAllCards(), std::vector<Card*>());
+	EXPECT_THROW(row.takeAllCards(), std::out_of_range);
 }
 
 TEST(StackTests, ConstructorTest) {
@@ -136,7 +143,7 @@ TEST(StackTests, AddCardTest) {
 	Card card1(12, Clubs);
 
 	EXPECT_THROW(stack.addCard(&card1), std::invalid_argument);
-	card1 = Card(1, Diamonds);
+	card1 = Card(0, Diamonds);
 	stack.addCard(&card1);
 
 	EXPECT_EQ(stack.getCount(), 1);
@@ -146,7 +153,7 @@ TEST(StackTests, AddCardTest) {
 	Card card3(3, Diamonds);
 	EXPECT_THROW(stack.addCard(&card3), std::invalid_argument);
 
-	Card card4(2, Diamonds);
+	Card card4(1, Diamonds);
 	stack.addCard(&card4);
 	EXPECT_EQ(stack.getCount(), 2);
 }
@@ -154,10 +161,12 @@ TEST(StackTests, AddCardTest) {
 
 TEST(StackTests, DrawTest) {
 	Stack stack = Stack();
-	Card card1(1, Diamonds);
+	Card card1(0, Diamonds);
 	stack.addCard(&card1);
-	Card card2(2, Diamonds);
+	Card card2(1, Diamonds);
 	card2.open();
 	stack.addCard(&card2);
-	EXPECT_EQ(stack.Draw(), "2♦️");
+	std::string test = "2";
+	test = test + u8"\u2666";
+	EXPECT_EQ(stack.Draw(), test);
 }

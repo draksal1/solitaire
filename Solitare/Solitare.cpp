@@ -19,41 +19,45 @@ Suit Card::getSuit() {
 
 
 std::string Card::Draw() {
-	std::string result = std::to_string(value);
+	std::string result;
+	if (value == 0)
+	{
+		result = "A";
+	}
+	else if (value == 10)
+	{
+		result = "J";
+	}
+	else if (value == 11)
+	{
+		result = "Q";
+	}
+	else if (value == 12)
+	{
+		result = "K";
+	}
+	else {
+		result = std::to_string(value + 1);
+	}
 	if (!is_open) {
 		result = "*";
 		return result;
 	}
+
 	if (suit == Diamonds) {
-		result = result + "D";
+		result = result + u8"\u2666";
 		return result;
 	}
 	else if (suit == Hearts) {
-		result = result + "H";
+		result = result + u8"\u2665";
 		return result;
 	}
 	else if (suit == Clubs) {
-		result = result + "C";
+		result = result + u8"\u2663";
 		return result;
 	}
-	result = result + "S";
+	result = result + u8"\u2660";
 	return result;
-
-
-	//if (suit == Diamonds) {
-	//	result = result + "♦️";
-	//	return result;
-	//}
-	//else if (suit == Hearts) {
-	//	result = result + "♥️";
-	//	return result;
-	//}
-	//else if (suit == Clubs) {
-	//	result = result + "♣️";
-	//	return result;
-	//}
-	//result = result + "♠️";
-	//return result;
 }
 
 

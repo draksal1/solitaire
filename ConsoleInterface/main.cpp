@@ -5,6 +5,10 @@
 #include <stdlib.h>
 
 int main() {
+	std::setlocale(LC_CTYPE, ".UTF8");
+	SetConsoleOutputCP(CP_UTF8);
+	SetConsoleCP(CP_UTF8);
+	
 	Desk desk = Desk();
 	std::string command;
 	Commander commander(desk);
