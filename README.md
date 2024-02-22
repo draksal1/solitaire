@@ -28,6 +28,8 @@ take - take a card from the deck.
 
 return - return cards to the deck.
 
+quit - quit the game.
+
 R1 R2 - move cards from row 1 to row 2 (rows are signed, row 7 is where cards from the deck are placed).
 
 R5 S0 - move a card from row 5 to stack 0 (stacks are numbered from 0 to 3 from left to right).
