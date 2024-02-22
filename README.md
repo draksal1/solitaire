@@ -8,17 +8,17 @@ The game has a console interface. When you start, the console will open and imme
 
 "*" - hidden card.
 
-"XS" - card (where X - value from 0 to 12, S - suit).
+"10♥" - card.
 
 <h2>Suits:</h2>
 
-C - clubs
+♣ - clubs
 
-S - spades
+♠ - spades
 
-D - diamonds
+♦ - diamonds
 
-H - hearts.
+♥ - hearts.
 
 <h2>Comands:</h2>
 
