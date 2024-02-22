@@ -40,6 +40,7 @@ public:
 	Row() = default;
 	void addCard(Card* card);
 	void addCardForce(Card* card);
+	void openLastCard();
 	Card* takeCard();
 	std::string Draw();
 	int getCount() { return count; };

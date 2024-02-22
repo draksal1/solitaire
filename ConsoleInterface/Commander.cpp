@@ -34,7 +34,7 @@ void Commander::operator()(std::string& comand)
                 {
                     desk.moveCardFromRowToStack(first, second);
                 }
-                else if (parsedCommand[1][0] == 'R' && second < 8 && second >= 0) {
+                else if (parsedCommand[1][0] == 'R' && second < 7 && second >= 0) {
                     desk.moveCardFromRowToRow(first, second);
                 }
             }

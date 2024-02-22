@@ -25,7 +25,7 @@ std::string Card::Draw() {
 		return result;
 	}
 	if (suit == Diamonds) {
-		result = result + "C";
+		result = result + "D";
 		return result;
 	}
 	else if (suit == Hearts) {
@@ -33,10 +33,10 @@ std::string Card::Draw() {
 		return result;
 	}
 	else if (suit == Clubs) {
-		result = result + "K";
+		result = result + "C";
 		return result;
 	}
-	result = result + "P";
+	result = result + "S";
 	return result;
 
 
@@ -135,9 +135,6 @@ Card* Row::takeCard()
 		Card* tmp = cards.back();
 		cards.pop_back();
 		count--;
-		if (count != 0) {
-			cards.back()->open();
-		}
 		return tmp;
 	}
 	else {
@@ -165,6 +162,11 @@ std::vector<Card*> Row::takeAllCards() {
 	return tmp;
 }
 
+void Row::openLastCard() {
+	if (count > 0) {
+		cards.back()->open();
+	}
+}
 
 
 
@@ -228,17 +230,33 @@ void Desk::moveCardFromRowToRow(int first, int second) {
 	Card* tmp;
 
 	if (first == 7) {
-		tmp = RowForDeck.takeCard();
+		try {
+			tmp = RowForDeck.takeCard();
+		}
+		catch (std::out_of_range) {
+			return;
+		}
 	}
 	else {
-		tmp = rows[first].takeCard();
+		try {
+			tmp = rows[first].takeCard();
+		}
+		catch (std::out_of_range) {
+			return;
+		}
 	}
 
 	try {
 		rows[second].addCard(tmp);
+		rows[second].openLastCard();
 	}
 	catch (std::invalid_argument) {
-		rows[first].addCardForce(tmp);
+		if (first == 7) {
+			RowForDeck.addCardForce(tmp);
+		}
+		else {
+			rows[first].addCardForce(tmp);
+		}
 	}
 }
 
@@ -250,17 +268,34 @@ void Desk::moveCardFromRowToStack(int first, int second) {
 	Card* tmp;
 
 	if (first == 7){
-		tmp = RowForDeck.takeCard();
+		try {
+			tmp = RowForDeck.takeCard();
+		}
+		catch (std::out_of_range) {
+			return;
+		}
 	}
 	else {
-		tmp = rows[first].takeCard();
+		try {
+			tmp = rows[first].takeCard();
+		}
+		catch (std::out_of_range) {
+			return;
+		}
 	}
+
 
 	try {
 		stacks[second].addCard(tmp);
+		rows[second].openLastCard();
 	}
 	catch (std::invalid_argument) {
-		rows[first].addCardForce(tmp);
+		if (first == 7) {
+			RowForDeck.addCardForce(tmp);
+		}
+		else {
+			rows[first].addCardForce(tmp);
+		}
 	}
 }
 
